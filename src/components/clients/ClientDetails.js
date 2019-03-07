@@ -6,160 +6,109 @@ import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
 import Spinner from '../layout/Spinner';
 import classnames from 'classnames';
+import { 
+    Card, 
+    CardBody, 
+    Row, 
+    Col,
+    Tooltip
+} from 'reactstrap';
 
-class ClientDetails extends Component {
-  state = {
-    showBalanceUpdate: false,
-    balanceUpdateAmount: ''
-  };
+import img1 from '../../assets/images/users/1.jpg';
 
-  // Update balance
-  balanceSubmit = e => {
-    e.preventDefault();
 
-    const { client, firestore } = this.props;
-    const { balanceUpdateAmount } = this.state;
+class UserProfile extends React.Component{
+  constructor(props) {
+    super(props);
 
-    const clientUpdate = {
-      balance: parseFloat(balanceUpdateAmount)
+    this.toggle01 = this.toggle01.bind(this);
+    this.toggle02 = this.toggle02.bind(this);
+    this.toggle03 = this.toggle03.bind(this);
+    this.state = {
+      tooltipOpen01: false,
+      tooltipOpen02: false,
+      tooltipOpen03: false
     };
-
-    // Update in firestore
-    firestore.update({ collection: 'clients', doc: client.id }, clientUpdate);
-  };
-
-  // Delete client
-  onDeleteClick = () => {
-    const { client, firestore, history } = this.props;
-
-    firestore
-      .delete({ collection: 'clients', doc: client.id })
-      .then(history.push('/'));
-  };
-
-  onChange = e => this.setState({ [e.target.name]: e.target.value });
-
-  render() {
-    const { client } = this.props;
-    const { showBalanceUpdate, balanceUpdateAmount } = this.state;
-
-    let balanceForm = '';
-    // If balance form should display
-    if (showBalanceUpdate) {
-      balanceForm = (
-        <form onSubmit={this.balanceSubmit}>
-          <div className="input-group">
-            <input
-              type="text"
-              className="form-control"
-              name="balanceUpdateAmount"
-              placeholder="Add New Balance"
-              value={balanceUpdateAmount}
-              onChange={this.onChange}
-            />
-            <div className="input-group-append">
-              <input
-                type="submit"
-                value="Update"
-                className="btn btn-outline-dark"
-              />
-            </div>
-          </div>
-        </form>
-      );
-    } else {
-      balanceForm = null;
-    }
-
-    if (client) {
-      return (
-        <div>
-          <div className="row">
-            <div className="col-md-6">
-              <Link to="/" className="btn btn-link">
-                <i className="fas fa-arrow-circle-left" /> Back To Dashboard
-              </Link>
-            </div>
-            <div className="col-md-6">
-              <div className="btn-group float-right">
-                <Link to={`/client/edit/${client.id}`} className="btn btn-dark">
-                  Edit
-                </Link>
-                <button onClick={this.onDeleteClick} className="btn btn-danger">
-                  Delete
-                </button>
-              </div>
-            </div>
-          </div>
-          <hr />
-          <div className="card">
-            <h3 className="card-header">
-              {client.firstName} {client.lastName}
-            </h3>
-            <div className="card-body">
-              <div className="row">
-                <div className="col-md-8 col-sm-6">
-                  <h4>
-                    Client ID:{' '}
-                    <span className="text-secondary">{client.id}</span>
-                  </h4>
-                </div>
-                <div className="col-md-4 col-sm-6">
-                  <h3 className="pull-right">
-                    Balance:{' '}
-                    <span
-                      className={classnames({
-                        'text-danger': client.balance > 0,
-                        'text-success': client.balance === 0
-                      })}
-                    >
-                      ${parseFloat(client.balance).toFixed(2)}
-                    </span>{' '}
-                    <small>
-                      <a
-                        href="#!"
-                        onClick={() =>
-                          this.setState({
-                            showBalanceUpdate: !this.state.showBalanceUpdate
-                          })
-                        }
-                      >
-                        <i className="fas fa-pencil-alt" />
-                      </a>
-                    </small>
-                  </h3>
-                  {balanceForm}
-                </div>
-              </div>
-
-              <hr />
-              <ul className="list-group">
-                <li className="list-group-item">
-                  Contact Email: {client.email}
-                </li>
-                <li className="list-group-item">
-                  Contact Phone: {client.phone}
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      );
-    } else {
-      return <Spinner />;
-    }
   }
+
+  toggle01() {
+    this.setState({
+      tooltipOpen01: !this.state.tooltipOpen01
+    });
+  }
+
+  toggle02() {
+    this.setState({
+      tooltipOpen02: !this.state.tooltipOpen02
+    });
+  }
+
+  toggle03() {
+    this.setState({
+      tooltipOpen03: !this.state.tooltipOpen03
+    });
+  }
+  
+    render() {
+        return (
+            <Card>
+                <CardBody>
+                    <div className="d-flex flex-row">
+                        <div className=""><img src={img1} alt="user" className="rounded-circle" width="100" /></div>
+                        <div className="pl-3">
+                            <h3 className="font-medium"></h3>
+                            <h6>UIUX Designer</h6>
+                            <button className="btn btn-success"><i className="ti-plus"></i> Follow</button>
+                        </div>
+                    </div>
+                    <Row className="mt-5">
+                      <Col className="border-right text-center">
+                        <h2 className="font-light">14</h2>
+                        <h6>Photos</h6>
+                      </Col>
+                      <Col className="border-right text-center">
+                        <h2 className="font-light">54</h2>
+                        <h6>Videos</h6>
+                      </Col>
+                      <Col className="border-right text-center">
+                        <h2 className="font-light">145</h2>
+                        <h6>Tasks</h6>
+                      </Col>
+                    </Row>
+                </CardBody>
+                <div>
+                  <hr />
+                </div>
+                <CardBody>
+                  <p className="text-center aboutscroll">
+                    Lorem ipsum dolor sit ametetur adipisicing elit, sed do eiusmod tempor incididunt adipisicing elit, sed do eiusmod tempor incididunLorem ipsum dolor sit ametetur adipisicing elit, sed do eiusmod tempor incididuntt
+                  </p>
+                  <Row className="text-center pt-2">
+                    <Col>
+                      <a href="/" className="text-muted" id="tooltip1"><i className="fa fa-globe font-20"></i></a>
+                      <Tooltip placement="top" isOpen={this.state.tooltipOpen01} target="tooltip1" toggle={this.toggle01}>
+                        Website
+                      </Tooltip>
+                    </Col>
+                    <Col>
+                      <a href="/" className="text-muted" id="tooltip2"><i className="fab fa-twitter font-20"></i></a>
+                      <Tooltip placement="top" isOpen={this.state.tooltipOpen02} target="tooltip2" toggle={this.toggle02}>
+                        twitter
+                      </Tooltip>
+                    </Col>
+                    <Col>
+                      <a href="/" className="text-muted" id="tooltip3"><i className="fab fa-facebook-square font-20"></i></a>
+                      <Tooltip placement="top" isOpen={this.state.tooltipOpen03} target="tooltip3" toggle={this.toggle03}>
+                        Facebook
+                      </Tooltip>
+                    </Col>
+                  </Row>
+                </CardBody>
+            </Card>
+        );
+    }
 }
 
-ClientDetails.propTypes = {
-  firestore: PropTypes.object.isRequired
-};
 
-export default compose(
-  firestoreConnect(props => [
-    { collection: 'clients', storeAs: 'client', doc: props.match.params.id }
-  ]),
-  connect(({ firestore: { ordered } }, props) => ({
-    client: ordered.client && ordered.client[0]
-  }))
-)(ClientDetails);
+
+export default UserProfile;
